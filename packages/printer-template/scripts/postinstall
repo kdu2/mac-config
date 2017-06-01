@@ -1,0 +1,20 @@
+#!/bin/bash
+
+name="printer-name"
+location="Location"
+displayname="printer display name"
+address="server/printer-name"
+driver="/Library/Printers/PPDs/Contents/Resources/driver.gz"
+
+/usr/sbin/lpadmin \
+    -E \
+    -p "$name" \
+    -L "$location" \
+     -D "$displayname" \
+    -v "lpd://$address" \
+    -P "$driver" \
+    -o 'printer-is-shared=false' \
+    -o 'printer-error-policy=abort-job'
+
+/usr/sbin/cupsenable "$name"
+/usr/sbin/cupsaccept "$name"

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Source</key>
+    <string>/Volumes/Data/software/Apple/macOS/Install OS X El Capitan.app</string>
+    <key>Output</key>
+    <string>/Volumes/Data/packages/installOS/</string>
+    <key>Packages</key>
+    <array>
+        <string>/Volumes/Data/packages/skipapplesetup/skipapplesetup.pkg</string>
+    </array>
+    <key>Identifier</key>
+    <string>com.github.kdu2.installelcapitan.pkg</string>
+</dict>
+</plist>

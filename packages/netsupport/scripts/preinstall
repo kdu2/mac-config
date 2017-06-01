@@ -1,0 +1,7 @@
+#!/bin/bash
+
+app=/Library/Application\ Support/NetSupport/NetSupport\ Assist.app
+
+if [ -d "$app" ]; then
+    rm -rf "$app"
+fi

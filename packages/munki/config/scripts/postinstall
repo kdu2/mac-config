@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# import cert to System keychain
+/usr/bin/security add-trusted-cert -d -r trustRoot -k "/Library/Keychains/System.keychain" /usr/local/munki/munkiserver_cert.cer
+/bin/rm /usr/local/munki/munkiserver_cert.cer
+
+# configure munki client settings
+/usr/bin/defaults write /Library/Preferences/ManagedInstalls SoftwareRepoURL "https://munkiserver/munki_repo"
+/usr/bin/defaults write /Library/Preferences/ManagedInstalls AdditionalHttpHeaders -array "Authorization: Basic ENCODEDSTRING"
+
+# install and configure munkireport
+ß/bin/bash -c "$(curl -s https://munkiserver/munkireport/index.php?/install)"
+/usr/bin/defaults write /Library/Preferences/MunkiReport BaseUrl "https://munkiserver/munkireport/"
+/usr/bin/defaults write /Library/Preferences/MunkiReport Passphrase 'passphrase'

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<installer-script authoringTool="com.apple.PackageMaker" authoringToolVersion="3.0.4" authoringToolBuild="179" minSpecVersion="1">
+    <title>Munki - Managed software installation for OS X</title>
+    <options customize="allow" allow-external-scripts="no"/>
+    <domains enable_anywhere="true"/>
+    <choices-outline>
+        <line choice="core"/>
+        <line choice="launchd"/>
+    </choices-outline>
+    <choice id="core" title="Munki core tools" description="Core command-line tools used by munki.">
+        <pkg-ref id="com.googlecode.munki.core"/>
+    </choice>
+    <choice id="launchd" title="Munki launchd agents" description="Munki launch daemons and launch agents.">
+        <pkg-ref id="com.googlecode.munki.launchd"/>
+    </choice>
+    <pkg-ref id="com.googlecode.munki.core" installKBytes="676" version="2.8.2.2855" auth="Root">#munkitools_core-2.8.2.2855.pkg</pkg-ref>
+    <pkg-ref id="com.googlecode.munki.launchd" installKBytes="9" version="2.0.0.1969" auth="Root" onConclusion="RequireRestart">#munkitools_launchd-2.0.0.1969.pkg</pkg-ref>
+    <pkg-ref id="com.googlecode.munki.core">
+        <bundle-version/>
+    </pkg-ref>
+    <pkg-ref id="com.googlecode.munki.launchd">
+        <bundle-version/>
+    </pkg-ref>
+</installer-script>

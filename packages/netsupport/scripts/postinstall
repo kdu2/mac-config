@@ -1,0 +1,15 @@
+#!/bin/bash
+
+room="roomname"
+
+/Library/Application\ Support/NetSupport/NetSupport\ Assist.app/Contents/MacOS/osx-intel \
+    --unattendedmodeui none \
+    --mode unattended \
+    --enable-components ClientComponent \
+    --LicenseChoice register \
+    --licenseename "NAME" \
+    --serialnumber "SERIAL" \
+    --maximumclients "MAX"
+    --authorisationcode "CODE" \
+    --InstallationTypeSelection client \
+    --roomname "$room"
