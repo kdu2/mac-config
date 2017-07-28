@@ -6,9 +6,6 @@
 # $1 - output direction: if argument is 'test', will write to standard output and local home folder, 
 #      if anything else (including blank), will write to log file
 
-# 7/11/17
-# kdu2
-
 # Build attributes ----------------------------------
 activity='logoff'
 activity_datetime=$(date +%D" "%r)
@@ -41,33 +38,32 @@ memory=$(system_profiler SPHardwareDataType | grep -i 'Memory' | awk '{print $2,
 computer=$computer_model";"$cpu_type";"$cpu_count" processor(s)~"$core_count" core(s)~"$cpu_speed";"$memory
 # username
 username=$(defaults read /Library/Preferences/com.apple.loginwindow lastUserName)
-# add as many local admin or other accounts to ignore as needed
 case $username in
-    "admin" | "admin2" ) exit 0
+    "admin" ) exit 0
 esac
 
 # area
 case $computer_name in
-    "prefix1"* )
+    "area1"* )
         area="area1"
-        member="true"
+        member="member"
         ;;
-    "prefix2"* | "prefix3"* )
+    "area2"* )
         area="area2"
         ismember=$(groups | grep group1)
         if [[ $ismember != "" ]]; then 
-            member="true"
+            member="member"
         fi
         ;;
     *)
         area="UNKNOWN"
-        member="true"
+        member="member"
         ;;
 esac
 
 # hard-coded for debug
 if [[ $member == "" ]]; then
-    member="member"
+    member="non-member"
 fi
 share="[no share info]"
 
@@ -88,7 +84,7 @@ fi
 log_filename="$area - $(date +%Y%m%d).log"
 
 # mount share if not already mounted
-mounted=$(mount | grep share)
+mounted=$(mount | grep folder)
 if [ ! -d $local_mount ]; then
     mkdir $local_mount
     if [ "$1" != 'test' ] && [[ $mounted == "" ]] ; then
@@ -99,15 +95,15 @@ fi
 # if the file does not already exist, create it by writing the file header
 if [ ! -f "$local_mount/$log_filename" ]; then
     log_header="\"area\",\"username\",\"member\",\"activity\",\"activity_datetime\",\"computer_name\",\"os\",\"os_version\",\"processor_info\",\"drive_share\",\"ip_address\",\"mac_address\""
-    echo -ne "$log_header\r\n" > "$local_mount/$log_filename"
+    echo -e "$log_header\r" > "$local_mount/$log_filename"
 
 fi
 
 # write to file
-echo -ne "$LOGLINE\r\n" >> "$local_mount/$log_filename"
+echo -e "$LOGLINE\r" >> "$local_mount/$log_filename"
 
 # unmount drive
-mounted=$(mount | grep share)
+mounted=$(mount | grep "folder")
 if [ "$mounted" != "" ]; then
     umount $local_mount
 fi
