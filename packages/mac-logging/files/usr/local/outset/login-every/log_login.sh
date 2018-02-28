@@ -18,7 +18,7 @@ computer_name=$(hostname -s)
 #os=$(sw_vers -productName)
 os_version=$(sw_vers -productVersion)
 case $os_version in
-    "10.12"* )
+    "10.12"* | "10.13"* )
         os="macOS"
         ;;
     "10.8"* | "10.9"* | "10.10"* | "10.11"* )
@@ -41,6 +41,8 @@ username=$(whoami)
 case $username in
     "admin" ) exit 0
 esac
+# groups
+groups=$(defaults read /Users/$username/Library/Preferences/com.trusourcelabs.NoMAD Groups)
 
 # area
 case $computer_name in
@@ -50,7 +52,7 @@ case $computer_name in
         ;;
     "area2"* )
         area="area2"
-        ismember=$(groups | grep group1)
+        ismember=$(echo $groups | grep group1)
         if [[ $ismember != "" ]]; then 
             member="member"
         fi
@@ -72,7 +74,7 @@ LOGLINE="\"$area\",\"$username\",\"$member\",\"$activity\",\"$activity_datetime\
 
 # Output Data ---------------------------------
 
-share_connect_str="//DOMAIN;user:password@server/share/folder"
+share_connect_str="//DOMAIN;username:password@server/share/folder"
 if [ "$1" != "test" ]; then
     local_mount="/Users/$username/.logs_dir"
 else
@@ -84,7 +86,7 @@ fi
 log_filename="$area - $(date +%Y%m%d).log"
 
 # mount share if not already mounted
-mounted=$(mount | grep folder)
+mounted=$(mount | grep user_logs)
 if [ ! -d $local_mount ]; then
     mkdir $local_mount
     if [ "$1" != 'test' ] && [[ $mounted == "" ]]; then
@@ -102,7 +104,7 @@ fi
 echo -e "$LOGLINE\r" >> "$local_mount/$log_filename"
 
 # unmount drive
-mounted=$(mount | grep "folder")
+mounted=$(mount | grep "user_logs")
 if [ "$mounted" != "" ]; then
     umount $local_mount
 fi
